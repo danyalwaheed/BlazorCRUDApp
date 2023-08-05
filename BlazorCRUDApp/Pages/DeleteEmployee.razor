@@ -1,0 +1,70 @@
+﻿@page "/DeleteEmployee/{Id}"
+@using BlazorCRUDApp.Data
+@inject EmployeeService employeeService
+@inject NavigationManager NavigationManager
+
+<h3>Delete Employee</h3>
+<h3>Are you sure want to delete this?</h3>
+
+<form>
+    <div class="row">
+        <div class=" col-md-8">
+            <div class="form-group">
+                <label>Employee Id:</label>
+                <label>@obj.EmployeeId</label>
+            </div>
+            <div class="form-group">
+                <label>Employee Name:</label>
+                <label>@obj.EmployeeName</label>
+            </div>
+            <div class="form-group">
+                <label>Employee Email:</label>
+                <label>@obj.EmployeeEmail</label>
+            </div>
+            <div class="form-group">
+                <label>Salary:</label>
+                <label>@obj.GrossSalary</label>
+            </div>
+            <div class="form-group">
+                <label>Department:</label>
+                <label>@obj.DepartmentId</label>
+            </div>
+            <div class="form-group">
+                <label>Country:</label>
+                <label>@obj.NationalityId</label>
+            </div>
+
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-danger" @onclick="@DeleteEmp" value="Delete" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    TblEmployee obj = new TblEmployee();
+    protected override async Task OnInitializedAsync()
+    {
+        obj= await Task.Run(() => employeeService.GetEmployeeById(Convert.ToInt32(Id)));
+    }
+    protected async void DeleteEmp()
+    {
+        await employeeService.DeleteEmployee(obj);
+        NavigationManager.NavigateTo("Employees");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("Employees");
+    }
+
+}

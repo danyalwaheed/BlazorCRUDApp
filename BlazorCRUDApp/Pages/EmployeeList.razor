@@ -1,0 +1,79 @@
+﻿@page "/Employees"
+@using BlazorCRUDApp.Data
+@inject EmployeeService employeeService
+<NavLink class="nav-link" href="AddEmployee">
+    <span class="oi oi-plus" aria-hidden="true"> Add New Employee</span>
+</NavLink>
+<h3>Employees List</h3>
+@if (Empobj is null)
+{
+    <p><em>Loading!</em></p>
+}
+else
+{
+    @if (Empobj.Count == 0)
+    {
+        <p><em>No employees found.</em></p>
+    }
+    else
+    {
+        <table class="table table-responsive">
+            <thead class="table-">
+                <tr>
+                    <th>
+                        Employee Name
+                    </th>
+                    <th>
+                        Employee Email
+                    </th>
+                    <th>
+                        Gross Salary
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var emp in Empobj)
+                {
+                <tr>
+                    <td>
+                        @emp.EmployeeName
+                    </td>
+                    <td>
+                        @emp.EmployeeEmail
+                    </td>
+                    <td>
+                        @emp.GrossSalary
+                    </td>
+                    <td>
+                        <a class="nav-link" href="EditEmployee/@emp.EmployeeId">
+                            <span class="oi oi-pencil" aria-hidden="true">Edit</span>
+                        </a>
+                        </td>
+                    <td>
+                        <a class="nav-link" href="DeleteEmployee/@emp.EmployeeId">
+                            <span class="oi oi-trash" aria-hidden="true">Delete</span>
+                        </a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    List<TblEmployee> Empobj = new List<TblEmployee>();
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Empobj = await employeeService.GetAllEmployees();
+        }
+        catch (Exception ex)
+        {
+            // Handle the exception appropriately, e.g., log or display an error message.
+            // You may also want to set Empobj to an empty list in case of an error.
+            Empobj = new List<TblEmployee>();
+        }
+    }
+}

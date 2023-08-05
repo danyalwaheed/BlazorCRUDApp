@@ -1,0 +1,53 @@
+﻿@page "/AddEmployee" 
+@using BlazorCRUDApp.Data
+@inject EmployeeService employeeService
+@inject NavigationManager NavigationManager
+<h3>Add Employee</h3>
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="FirstName" class="control-label">Employee Name</label>
+                <input for="FirstName" class="form-control" @bind="@obj.EmployeeName" />
+            </div>
+            <div class="form-group">
+                <label for="MiddleName" class="control-label">Employee Email</label>
+                <input for="MiddleName" class="form-control" @bind="@obj.EmployeeEmail" />
+            </div>
+            <div class="form-group">
+                <label for="LastName" class="control-label"> Salary</label>
+                <input for="LastName" class="form-control" @bind="@obj.GrossSalary" />
+            </div>
+            
+            <div class="form-group">
+                <label for="City" class="control-label"> Department</label>
+                <input for="City" class="form-control" @bind="@obj.DepartmentId" />
+            </div>
+            <div class="form-group">
+                <label for="Designation" class="control-label"> Country</label>
+                <input for="Designation" class="form-control" @bind="@obj.NationalityId" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateEmployee" value="Save" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    TblEmployee obj = new TblEmployee();
+    protected async void CreateEmployee()
+    {
+        await employeeService.InsertEmployee(obj);
+        NavigationManager.NavigateTo("Employees");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("Employees");
+    }
+}
